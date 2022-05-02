@@ -1,0 +1,216 @@
+{
+	"info": {
+		"_postman_id": "2f61fe1e-5a9e-4200-bffb-e18a58016925",
+		"name": "real-take-home",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "valid mission",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('response OK', () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test('response matches schema', () => {\r",
+							"    pm.response.to.have.jsonSchema({\r",
+							"        type: \"object\",\r",
+							"        properties: {\r",
+							"            status: { type: \"string\"},\r",
+							"            body: {\r",
+							"                type: \"object\",\r",
+							"                properties: {\r",
+							"                    x: { type: \"number\" },\r",
+							"                    y: { type: \"number\" },\r",
+							"                    direction: { type: \"string\" }\r",
+							"                }\r",
+							"            }\r",
+							"        }\r",
+							"    })\r",
+							"})\r",
+							"\r",
+							"pm.test('response is correct', () => {\r",
+							"    pm.response.to.have.jsonBody({\r",
+							"        \"status\": \"OK\",\r",
+							"        \"body\": {\r",
+							"            \"x\": 0,\r",
+							"            \"y\": 0,\r",
+							"            \"direction\": \"N\"\r",
+							"        }\r",
+							"    })\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"position\": { \"x\": 1, \"y\": 1, \"direction\": \"N\" },\r\n    \"areaSize\": [2,2],\r\n    \"instructions\": \"MRMRMMRMMRMM\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8081/mission",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"mission"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "invalid mission",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('response OK', () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test('response matches schema', () => {\r",
+							"    pm.response.to.have.jsonSchema({\r",
+							"        type: \"object\",\r",
+							"        properties: {\r",
+							"            status: { type: \"string\"},\r",
+							"            error: {\r",
+							"                message: { type: \"string\" },\r",
+							"                details: { type: \"array\"}\r",
+							"            }\r",
+							"        }\r",
+							"    })\r",
+							"})\r",
+							"\r",
+							"pm.test('response is correct', () => {\r",
+							"    pm.response.to.have.jsonBody({\r",
+							"        \"error\": {\r",
+							"            \"message\": \"Out of bounds!\",\r",
+							"            \"details\": [\r",
+							"                {\r",
+							"                    \"x\": 1,\r",
+							"                    \"y\": 1,\r",
+							"                    \"direction\": \"N\"\r",
+							"                }\r",
+							"            ]\r",
+							"        },\r",
+							"        \"status\": \"ERROR\",\r",
+							"        \"body\": \"Something went wrong!\"\r",
+							"    })\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"position\": { \"x\": 1, \"y\": 1, \"direction\": \"N\" },\r\n    \"areaSize\": [0, 0],\r\n    \"instructions\": \"MRMRMMRMMRMM\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8081/mission",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"mission"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "invalid method",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('404', () => {\r",
+							"    pm.response.to.have.status(404)\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8081/mission",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"mission"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
