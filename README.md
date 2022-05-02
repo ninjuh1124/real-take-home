@@ -1,3 +1,31 @@
+# Notes from the Interviewee
+
+## Server
+
+* Only 2 valid routes exist: a `GET` to `/alive` and `POST` to `/mission`. 
+  * `/alive` is meant for the frontend to ping to ensure that it is ready to receive requests
+  * `/mission` takes in a JSON with the following schema:
+
+```typescript
+interface body {
+	position: { x: number, y: number, direction: "E"|"S"|"W"|"N" };
+	areaSize: number[]; // first element is x, second is y. an input of [3, 1] will have coordinates supported up to and including x = 3 and y = 1
+	instructions: string; // M, L, R instructions will act upon the rover. other letters may be accepted, but will not do anything.
+}
+```
+
+* Out of bounds will stop processing instructions and return a response with `"status": "ERROR"`
+* A rover starting out of bounds will immediately return a response with `"status": "ERROR"`
+* In either of the above cases, the error field will contain mission details with last known coordinates, including the coordinates that caused the Out of Bounds.
+* Unit tests exist for processing individual instructions and whole missions. For actual API testing, I've created a Postman collection with included tests.
+
+## Frontend
+
+* Due to time constraints over my weekend, and me wanting to have thorough testing on the backend, frontend was kept fairly minimalist. It's just bootstrap elements with the focus on function over form.
+* Jest/RTL was giving me issues with async functions, so I couldn't test the actions as I had hoped. It's probably an issue with webpack, and I'm not that comfortable with webpack's config.
+
+***
+
 # Take Home Exercise
 
 Please use Javascript to code the following exercise. 
